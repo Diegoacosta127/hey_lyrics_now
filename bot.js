@@ -5,7 +5,7 @@ const { Telegraf } = require('telegraf');
 const BASE_URL = 'https://api.musixmatch.com/ws/1.1';
 
 // Conexión con Telegram
-const token = '6095592859:AAF3JEBrtkMILGvUoEnGZUQVieS1WcfnM74';
+const token = '6095592859:AAG7ImwPScy04HbRgD0ZJaPSTpPIjkuLvYA';
 const bot = new Telegraf(token, {polling: true});
 // Conexión con Musixmatch
 const url = 'https://api.musixmatch.com/ws/1.1';
