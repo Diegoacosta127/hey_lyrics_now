@@ -1,11 +1,6 @@
 const axios = require('axios').default;
 const cheerio = require('cheerio');
 const { Telegraf } = require('telegraf');
-const Promise = require('bluebird');
-  Promise.config({
-    cancellation: true
-  });
-
 
 const BASE_URL = 'https://api.musixmatch.com/ws/1.1';
 
