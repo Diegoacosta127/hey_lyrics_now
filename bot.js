@@ -2,8 +2,6 @@ const axios = require('axios').default;
 const cheerio = require('cheerio');
 const { Telegraf } = require('telegraf');
 
-const BASE_URL = 'https://api.musixmatch.com/ws/1.1';
-
 // Conexión con Telegram
 const token = '6095592859:AAG7ImwPScy04HbRgD0ZJaPSTpPIjkuLvYA';
 const bot = new Telegraf(token, {polling: true});
