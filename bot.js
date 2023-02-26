@@ -57,12 +57,7 @@ bot.command('song', ctx => {
       const html = response.data;
       const $ = cheerio.load(html);
       const lyric = $('.mxm-lyrics__content ').text();
-      if (lyric === '') {
-        ctx.reply("Sorry, it seems we don't have these lyrics. Try again with another /song command or try with another /artist.")
-        return;
-      } else {
-        ctx.reply(`OK, here are the lyrics of "${song}" by ${artist}\n\n********\n\n${lyric}\n\n********\n\nIf you want to search for another song of this artist, type /song followed by its name. Or, if you want to search for another artist, type /artist followed by the name of the artist`);
-      }
+      ctx.reply(`OK, here are the lyrics of "${song}" by ${artist}\n\n********\n\n${lyric}\n\n********\n\nIf you want to search for another song of this artist, type /song followed by its name. Or, if you want to search for another artist, type /artist followed by the name of the artist`);
     })
     .catch((error) => {
       ctx.reply("Sorry, I couldn't find the lyrics of that song. Try again with another one or check for possible spelling mistake.")
