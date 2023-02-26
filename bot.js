@@ -1,6 +1,11 @@
 const axios = require('axios').default;
 const cheerio = require('cheerio');
 const { Telegraf } = require('telegraf');
+const EventEmitter = require('events');
+class MyEmitter extends EventEmitter {}
+
+const myEmitter = new MyEmitter();
+myEmitter.setMaxListeners(0);
 
 // Conexión con Telegram
 const token = '6095592859:AAG7ImwPScy04HbRgD0ZJaPSTpPIjkuLvYA';
