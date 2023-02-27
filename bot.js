@@ -57,7 +57,7 @@ bot.command('song', ctx => {
     ctx.reply('Tell me the name of the song!');
     return;
   } else {
-    axios.get(`https://www.musixmatch.com/es/letras/${artist.replace(/\s/g, "-")}/${song.replace(/\s/g, "-")}`)
+    axios.get(`https://www.musixmatch.com/lyrics/${artist.replace(/\-/g,'').replace(/\s/g,'-').replace(/,/g, '')}/${song.replace(/\-/g,'').replace(/,/g, '').replace(/\s/g,'-')}`, {maxRedirects: 1000})
     .then(function(response) {
       const html = response.data;
       const $ = cheerio.load(html);
