@@ -17,15 +17,18 @@ const musixmatch = '3d9beec34f130fe7f8967bcec2286f67';
 let artist = '';
 let song = '';
 
+// Comando start
 bot.start((ctx) => {
   const username = (ctx.update.message.from.first_name);
   ctx.reply(`Hi ${username}! I'm Hey Lyrics Now! I can send you the lyrics of any song you want. Just type /help and I'll tell you how to use me.`)
 });
 
+// Comando help
 bot.help((ctx) => {
   ctx.reply("To use me, start typing /artist followed by the name of the artist. Once you've choosen the artist, type /song followed by the name of the song you want the lyrics of. If you want to search for another song of the same artist, type /song followed by the name of the song. If you want to search for another artist, type /artist followed by the name of the artist.")
 });
 
+// Comando artist
 bot.command('artist', (ctx) => {
   artist = ctx.update.message.text.split(' ').slice(1).toString().replace(/,/g, ' ');
   if (artist === ''){
@@ -47,6 +50,7 @@ bot.command('artist', (ctx) => {
   }
 });
 
+// Comando song
 bot.command('song', ctx => {
   song = ctx.update.message.text.split(' ').slice(1).toString().replace(/,/g, ' ');
   if (artist === '') {
@@ -57,8 +61,6 @@ bot.command('song', ctx => {
     ctx.reply('Tell me the name of the song!');
     return;
   } else {
-    /*axios.get("https://www.musixmatch.com/lyrics/Limp-Bizkit/Break-Stuff", {maxRedirects: 1000})
-    .then(function(response)*/
     axios.get(`https://www.musixmatch.com/lyrics/${artist.replace(/\-/g,'').replace(/\s/g,'-').replace(/,/g, '')}/${song.replace(/\-/g,'').replace(/,/g, '').replace(/[\s]+/g,'-')}`, {maxRedirects: 1000})
     .then(function(response) {
       const $ = cheerio.load(response.data);
@@ -66,8 +68,7 @@ bot.command('song', ctx => {
       ctx.reply(`OK, here are the lyrics of "${song}" by ${artist}\n\n********\n\n${lyric}\n\n********\n\nIf you want to search for another song of this artist, type /song followed by its name. Or, if you want to search for another artist, type /artist followed by the name of the artist`);
     })
     .catch((error) => {
-      ctx.reply("Sorry, I couldn't find the lyrics of that song. Try again with another one or check for possible spelling mistake.")
-      //console.log(error);
+      ctx.reply("Sorry, I couldn't find the lyrics of that song. Try again with another one or check for possible spelling mistake.");
     });
   }
 });
