@@ -57,16 +57,17 @@ bot.command('song', ctx => {
     ctx.reply('Tell me the name of the song!');
     return;
   } else {
-    axios.get(`https://www.musixmatch.com/lyrics/${artist.replace(/\-/g,'').replace(/\s/g,'-').replace(/,/g, '')}/${song.replace(/\-/g,'').replace(/,/g, '').replace(/\s/g,'-')}`, {maxRedirects: 1000})
+    /*axios.get("https://www.musixmatch.com/lyrics/Limp-Bizkit/Break-Stuff", {maxRedirects: 1000})
+    .then(function(response)*/
+    axios.get(`https://www.musixmatch.com/lyrics/${artist.replace(/\-/g,'').replace(/\s/g,'-').replace(/,/g, '')}/${song.replace(/\-/g,'').replace(/,/g, '').replace(/[\s]+/g,'-')}`, {maxRedirects: 1000})
     .then(function(response) {
-      const html = response.data;
-      const $ = cheerio.load(html);
-      const lyric = $('.mxm-lyrics__content ').text();
+      const $ = cheerio.load(response.data);
+      const lyric = $('.r-ueyrd6').text().replace(/([a-z]|['"\?\!\)]|[0-9])([A-Z]|[\(\¡\¿])/g, '$1\n$2').replace(/(")(\s)([a-z]+|[0-9]+)("\n)([A-Z])/g, '$2$3"\n$5');
       ctx.reply(`OK, here are the lyrics of "${song}" by ${artist}\n\n********\n\n${lyric}\n\n********\n\nIf you want to search for another song of this artist, type /song followed by its name. Or, if you want to search for another artist, type /artist followed by the name of the artist`);
     })
     .catch((error) => {
       ctx.reply("Sorry, I couldn't find the lyrics of that song. Try again with another one or check for possible spelling mistake.")
-      console.log(error);
+      //console.log(error);
     });
   }
 });
