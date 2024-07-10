@@ -1,0 +1,10 @@
+{
+    "dev": {
+      "driver": "pg",
+      "user": "diegote",
+      "host": "localhost",
+      "database": "hey_lyrircs_now",
+      "password": "diegote"
+    }
+  }
+  

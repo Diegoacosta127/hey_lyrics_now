@@ -4,6 +4,14 @@ const { Telegraf } = require('telegraf');
 const EventEmitter = require('events');
 class MyEmitter extends EventEmitter {};
 const { Pool } = require('pg');
+require ('dotenv').config();
+
+const {
+  POSTGRES_HOST,
+  POSTGRES_DB,
+  POSTGRES_USER,
+  POSTGRES_PASSWORD
+  } = process.env
 
 const myEmitter = new MyEmitter();
 myEmitter.setMaxListeners(0);
