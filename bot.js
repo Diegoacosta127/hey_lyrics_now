@@ -6,13 +6,13 @@ class MyEmitter extends EventEmitter {};
 const { Pool } = require('pg');
 require ('dotenv').config();
 
-const {
+/*const {
   POSTGRES_HOST,
   POSTGRES_DB,
   POSTGRES_USER,
   POSTGRES_PASSWORD,
   PGPORT
-  } = process.env
+  } = process.env*/
 
 const myEmitter = new MyEmitter();
 myEmitter.setMaxListeners(0);
@@ -25,11 +25,11 @@ myEmitter.setMaxListeners(0);
 });*/
 
 const pool = new Pool({
-  host: POSTGRES_HOST,
-  database: POSTGRES_DB,
-  username: POSTGRES_USER,
-  password: POSTGRES_PASSWORD,
-  port: PGPORT
+  host: "roundhouse.proxy.rlwy.net",
+  database: "hey_lyrics_now",
+  username: "postgres",
+  password: "OxTkagYvhQXjHHeNLqAJJZmuZmCcIldh",
+  port: 13211
 })
 
 console.log("host :", POSTGRES_HOST);
