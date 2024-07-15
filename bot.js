@@ -27,7 +27,7 @@ myEmitter.setMaxListeners(0);
 const pool = new Pool({
   host: "roundhouse.proxy.rlwy.net",
   database: "hey_lyrics_now",
-  username: "postgres",
+  user: "postgres",
   password: "OxTkagYvhQXjHHeNLqAJJZmuZmCcIldh",
   port: 13211
 })
