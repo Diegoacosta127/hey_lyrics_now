@@ -16,12 +16,20 @@ const {
 const myEmitter = new MyEmitter();
 myEmitter.setMaxListeners(0);
 
-const pool = new Pool({
+/*const pool = new Pool({
   host: 'localhost',
   database: 'hey_lyrics_now',
   username: 'diegote',
   password: 'diegote'
-});
+});*/
+
+const pool = new Pool({
+  host:'roundhouse.proxy.rlwy.net',
+  database:'hey_lyrics_now',
+  username:'postgres',
+  password:'OxTkagYvhQXjHHeNLqAJJZmuZmCcIldh',
+  port: '13211'
+})
 
 // Conexión con Telegram
 const token = '6095592859:AAG7ImwPScy04HbRgD0ZJaPSTpPIjkuLvYA';
