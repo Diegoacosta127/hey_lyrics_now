@@ -25,11 +25,11 @@ myEmitter.setMaxListeners(0);
 });*/
 
 const pool = new Pool({
-  host:'roundhouse.proxy.rlwy.net',
-  database:'hey_lyrics_now',
-  username:'postgres',
-  password:'OxTkagYvhQXjHHeNLqAJJZmuZmCcIldh',
-  port: '13211'
+  host: POSTGRES_HOST,
+  database: POSTGRES_DB,
+  username: POSTGRES_USER,
+  password: POSTGRES_PASSWORD,
+  port: PGPORT
 })
 
 // Conexión con Telegram
