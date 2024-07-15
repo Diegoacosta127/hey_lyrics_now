@@ -32,6 +32,12 @@ const pool = new Pool({
   port: PGPORT
 })
 
+console.log("host :", POSTGRES_HOST);
+console.log("db :", POSTGRES_DB);
+console.log("user :", POSTGRES_USER);
+console.log("pass :", POSTGRES_PASSWORD);
+console.log("port :", PGPORT);
+
 // Conexión con Telegram
 const token = '6095592859:AAG7ImwPScy04HbRgD0ZJaPSTpPIjkuLvYA';
 const bot = new Telegraf(token, {polling: true});
