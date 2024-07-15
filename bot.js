@@ -10,7 +10,8 @@ const {
   POSTGRES_HOST,
   POSTGRES_DB,
   POSTGRES_USER,
-  POSTGRES_PASSWORD
+  POSTGRES_PASSWORD,
+  PGPORT
   } = process.env
 
 const myEmitter = new MyEmitter();
