@@ -4,26 +4,19 @@ const { Telegraf } = require('telegraf');
 const EventEmitter = require('events');
 class MyEmitter extends EventEmitter {};
 const { Pool } = require('pg');
-require ('dotenv').config();
-
-/*const {
-  POSTGRES_HOST,
-  POSTGRES_DB,
-  POSTGRES_USER,
-  POSTGRES_PASSWORD,
-  PGPORT
-  } = process.env*/
 
 const myEmitter = new MyEmitter();
 myEmitter.setMaxListeners(0);
 
-/*const pool = new Pool({
-  host: 'localhost',
-  database: 'hey_lyrics_now',
-  username: 'diegote',
-  password: 'diegote'
-});*/
+/* Conexión con base de datos local
+  const pool = new Pool({
+    host: 'localhost',
+    database: 'hey_lyrics_now',
+    username: 'diegote',
+    password: 'diegote'
+  });*/
 
+// Conexión con base de datos en Railway
 const pool = new Pool({
   host: "roundhouse.proxy.rlwy.net",
   database: "hey_lyrics_now",
@@ -47,7 +40,7 @@ bot.start((ctx) => {
   const username = (ctx.update.message.from.first_name);
   const user_id = (ctx.update.message.from.id);
   const lang = (ctx.update.message.from.language_code);
-  
+  // Inserción de usuario a base de datos
   const insertUser = async () => {
     try{
       const query_username = [username]
@@ -87,6 +80,7 @@ bot.help((ctx) => {
 bot.command('artist', (ctx) => {
   artist_lang = (ctx.update.message.from.language_code);
   artist = ctx.update.message.text.split(' ').slice(1).toString().replace(/,/g, ' ');
+  // Si se pasa solo el comando /artist sin el nombre de artista
   if (artist === ''){
     if (artist_lang == 'es') {
       ctx.reply('¡Dime el nombre del artista!');
@@ -94,9 +88,11 @@ bot.command('artist', (ctx) => {
       ctx.reply('Tell me the name of the artist!');
     }
   } else {
+    // Consulta con la API de musixmatch si existe el artista
     axios.get(`${url}/artist.search?q_artist=${artist}&apikey=${musixmatch}`)
       .then((response) => {
         const artistList = response.data.message.body.artist_list;
+        // Si no existe el artista en la API de musixmatch
         if (artistList.length === 0) {
           if (artist_lang == 'es') {
             ctx.reply(`Lo siento, no pude encontrar al artista ${artist}. Prueba de nuevo con otro o revisa algún posible error de escritura`);
@@ -105,12 +101,14 @@ bot.command('artist', (ctx) => {
           }
           return;
         } else {
+          // Se asigna el artista a la variable artist
           artist = artist.replace(/(^\w{1})|(\s+\w{1})/g, letter => letter.toUpperCase());
           if (artist_lang == 'es') {
             ctx.reply(`Tu artista es ${artist}.\n\nAhora dame el comando /song más el nombre de la canción de ${artist} que quieres las letras. O, si quieres buscar otro artista, escribe /artist seguido del nombre del artista.`);
           } else {
             ctx.reply(`Your artist is ${artist}.\n\nNow give me the /song command and the name of the song of ${artist} you want the lyrics of. Or, if you want to search for another artist, type /artist followed by the name of the artist`);
           }
+          // Inserción de artista a la base de datos
           const insertArtist = async () => {
             try{
               const query_artist = [artist]
@@ -137,6 +135,7 @@ bot.command('artist', (ctx) => {
 bot.command('song', ctx => {
   song_lang = (ctx.update.message.from.language_code);
   song = ctx.update.message.text.split(' ').slice(1).toString().replace(/,/g, ' ');
+  // Si se pasa el comando /song antes que el comando /artist
   if (artist === '') {
     if (song_lang == 'es') {
       ctx.reply('¡Primero dime el nombre del artista!');
@@ -145,6 +144,7 @@ bot.command('song', ctx => {
     }
     return;
   }
+  // Si se pasa solo el comando /song sin el nombre de la canción
   if (song === '') {
     if (song_lang == 'es') {
       ctx.reply('¡Dime el nombre de la canción!');
@@ -154,16 +154,18 @@ bot.command('song', ctx => {
     return;
   } else {
     song = song.replace(/(^\w{1})|(\s+\w{1})/g, letter => letter.toUpperCase());
+    // Se busca la URL con nombres de artista y canción para hacer scraping
     axios.get(`https://www.musixmatch.com/lyrics/${artist.replace(/\-/g,'').replace(/\s/g,'-').replace(/,/g, '')}/${song.replace(/\-/g,'').replace(/,/g, '').replace(/[\s]+/g,'-')}`, {maxRedirects: 1000})
     .then(function(response) {
       const $ = cheerio.load(response.data);
+      // Se guarda la letra de la canción en la variable lyric
       const lyric = $('.r-ueyrd6').text().replace(/([a-z]|['",\?\!\)]|[0-9])([A-Z]|[\(\¡\¿])/g, '$1\n$2').replace(/(")(\s)([a-z]+|[0-9]+)("\n)([A-Z])/g, '$2$3"\n$5');
       if (song_lang == 'es') {
         ctx.reply(`OK, aquí tienes la letra de "${song}" por ${artist}\n\n********\n\n${lyric}\n\n********\n\nSi deseas buscar otra canción de este artista, escribe /song seguido de su nombre. O, si quieres buscar otro artista, escribe /artist seguido del nombre del artisa.`);
       } else {
         ctx.reply(`OK, here are the lyrics of "${song}" by ${artist}\n\n********\n\n${lyric}\n\n********\n\nIf you want to search for another song of this artist, type /song followed by its name. Or, if you want to search for another artist, type /artist followed by the name of the artist`);
       }
-
+      // Función para la inserción de canción en la base de datos
       var insertSong = async () => {
         try{
           const select_artist_id = "SELECT artist_id FROM artists WHERE artist=($1)";
@@ -179,7 +181,7 @@ bot.command('song', ctx => {
           console.log(err);
         }
       };
-
+      // Inserción del pedido del usuario a la base de datos
       var insertRequest = async () => {
         try {
           const user_id = (ctx.update.message.from.id);
@@ -214,6 +216,7 @@ bot.command('song', ctx => {
   }
 });
 
+// Respuesta a cualquier texto no reconocido por el bot
 bot.on('text', (ctx) => {
   err_lang = (ctx.update.message.from.language_code);
   if (err_lang == 'es') {
